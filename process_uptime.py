@@ -6,6 +6,7 @@
 #
 import os
 import sys
+import time
 from datetime import datetime
 
 
@@ -55,10 +56,11 @@ def get_process_uptime(PID):
     SYSTEM_UPTIME = readfile("/proc/uptime").split()[0]
     # Get the process uptime (since system boot) in JIFFS
     PROCESS_JIFFS = int(PROCESS_CLOCK_TICKS) / CLK_TCK
-    # datetime object of process start time
-    RAW_START_TIME = datetime.now().timestamp() - int(
-        float(SYSTEM_UPTIME) - PROCESS_JIFFS
-    )
+    # .timestamp() was introduced in python > 3.3 so we convert manually instead
+    now = time.mktime(datetime.now().timetuple()) + datetime.now().microsecond / 1e6
+    # Obtain timestamp of the process start time
+    RAW_START_TIME = now - (int(float(SYSTEM_UPTIME) - PROCESS_JIFFS))
+    # Convert start time to datetime object
     PROCESS_START_TIME = datetime.fromtimestamp(RAW_START_TIME)
 
     return datetime.now() - PROCESS_START_TIME
