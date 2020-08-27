@@ -71,7 +71,7 @@ for item in sys.argv[1:]:
         UPTIME = get_process_uptime(item)
         print("Uptime: {0}".format(seconds2human(UPTIME.seconds)))
         print("Start Date: {0}".format((datetime.now() - UPTIME).strftime("%c")))
-    except FileNotFoundError as ex:
+    except Exception as ex:
         print("Error with pid {0}".format(ex))
 
 print("")
