@@ -19,7 +19,7 @@ def readfile(filename):
     return ret
 
 
-def seconds2human(seconds, precision=2):
+def seconds2human(seconds, precision=6):
     """ Convert time in seconds to human-readable representation
     """
     intervals = [
