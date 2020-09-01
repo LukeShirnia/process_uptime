@@ -44,6 +44,16 @@ def seconds2human(seconds, precision=2):
     return ", ".join(result[:precision])
 
 
+def timedelta_total_seconds(timedelta):
+    """ Returns a timedelta object in seconds
+
+    timedelta.total_seconds() does not exist on python <= 2.6
+    """
+    return (
+        timedelta.microseconds + 0.0 +
+        (timedelta.seconds + timedelta.days * 24 * 3600) * 10 ** 6) / 10 ** 6
+
+
 def get_process_uptime(PID):
     """ Returns timedelta object of a process' uptime
     """
@@ -71,7 +81,7 @@ for item in sys.argv[1:]:
         print("")
         print("PID: {0}".format(item))
         UPTIME = get_process_uptime(item)
-        print("Uptime: {0}".format(seconds2human(UPTIME.seconds)))
+        print("Uptime: {0}".format(seconds2human(timedelta_total_seconds(UPTIME))))
         print("Start Date: {0}".format((datetime.now() - UPTIME).strftime("%c")))
     except Exception as ex:
         print("Error with pid {0}".format(ex))
